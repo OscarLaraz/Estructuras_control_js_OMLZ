@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promedio de Edades por Turno</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Promedio de Edades de Estudiantes</h1>
+
+    <h2>Turno Mañana (5 estudiantes)</h2>
+    <div id="manana-inputs"></div>
+
+    <h2>Turno Tarde (6 estudiantes)</h2>
+    <div id="tarde-inputs"></div>
+
+    <h2>Turno Noche (11 estudiantes)</h2>
+    <div id="noche-inputs"></div>
+
+    <button onclick="calcularPromedios()">Calcular Promedios</button>
+
+    <h3>Resultados</h3>
+    <p id="resultados"></p>
+
+    <script>
+        // Función para crear los campos de entrada para edades
+        function crearCampos(id, cantidad) {
+            const contenedor = document.getElementById(id);
+            for (let i = 0; i < cantidad; i++) {
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.placeholder = `Edad ${i + 1}`;
+                contenedor.appendChild(input);
+                contenedor.appendChild(document.createElement('br'));
+            }
+        }
+
+        // Crear campos de entrada para cada turno
+        crearCampos('manana-inputs', 5);
+        crearCampos('tarde-inputs', 6);
+        crearCampos('noche-inputs', 11);
+
+        // Función para calcular los promedios y mostrar resultados
+        function calcularPromedios() {
+            function calcularPromedio(selector) {
+                const inputs = document.querySelectorAll(selector);
+                let suma = 0;
+                let conteo = 0;
+                inputs.forEach(input => {
+                    const valor = parseFloat(input.value);
+                    if (!isNaN(valor)) {
+                        suma += valor;
+                        conteo++;
+                    }
+                });
+                return conteo > 0 ? suma / conteo : 0;
+            }
+
+            // Calcular promedios
+            const promedioManana = calcularPromedio('#manana-inputs input');
+            const promedioTarde = calcularPromedio('#tarde-inputs input');
+            const promedioNoche = calcularPromedio('#noche-inputs input');
+
+            // Mostrar resultados
+            const resultados = document.getElementById('resultados');
+            resultados.innerHTML = `
+                Promedio Turno Mañana: ${promedioManana.toFixed(2)}<br>
+                Promedio Turno Tarde: ${promedioTarde.toFixed(2)}<br>
+                Promedio Turno Noche: ${promedioNoche.toFixed(2)}
+            `;
+
+            // Determinar el turno con el promedio mayor
+            if (promedioManana > promedioTarde && promedioManana > promedioNoche) {
+                resultados.innerHTML += `<br>El turno con el promedio de edades mayor es el turno Mañana.`;
+            } else if (promedioTarde > promedioManana && promedioTarde > promedioNoche) {
+                resultados.innerHTML += `<br>El turno con el promedio de edades mayor es el turno Tarde.`;
+            } else if (promedioNoche > promedioManana && promedioNoche > promedioTarde) {
+                resultados.innerHTML += `<br>El turno con el promedio de edades mayor es el turno Noche.`;
+            } else {
+                resultados.innerHTML += `<br>Hay empate entre dos o más turnos.`;
+            }
+        }
+    </script>
+</body>
+</html>
+
